@@ -15,6 +15,13 @@ if [ "$1" = "issues" ]; then
 	id=$(bash  "${DIR}/issues.sh")
 
 	if [ -n "$id" ]; then
-		gh issue edit ${id} --repo ${repo} 
+
+		if [[ $id == edit* ]]; then
+			gh issue edit $(echo ${id}|sed "s/edit //") --repo ${repo} 
+		elif [[ $id == comment* ]]; then
+			gh issue comment $(echo ${id}|sed "s/comment //") --repo ${repo} 
+		elif [[ $id == close* ]]; then
+			gh issue close $(echo ${id}|sed "s/close //") --repo ${repo} 
+		fi
 	fi
 fi

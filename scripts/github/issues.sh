@@ -7,6 +7,8 @@ echo "${repo}" | xargs -I {}  gh issue list --json id,labels,state,url,milestone
         --header='enter to open;ctrl+a to self assign;ctrl+e to edit' \
         --preview='echo {2} | base64 --decode | jq -r '\''"Name \(.title) \(.number) \nCreated At \(.createdAt) Updated \(.updatedAt)\nState \(.state)\n\(.url)\nlabels \(.labels)\nassignees \(.assignees)"'\'''  \
 	--bind="ctrl-a:execute:echo {}|cut -d$'\t' -f2|base64 --decode|jq -r '.number'|xargs -I % gh issue edit --repo ${repo} --add-assignee \"@me\" %" \
-	--bind="ctrl-e:abort+become:echo {}|cut -d$'\t' -f2|base64 --decode|jq -r '.number' " \
+	--bind="ctrl-e:abort+become:echo {}|cut -d$'\t' -f2|base64 --decode|jq -r '.number'|xargs -I % echo edit % " \
+	--bind="F4:abort+become:echo {}|cut -d$'\t' -f2|base64 --decode|jq -r '.number'|xargs -I % echo comment % " \
+	--bind="ctrl-q:abort+become:echo {}|cut -d$'\t' -f2|base64 --decode|jq -r '.number'|xargs -I % echo close % " \
         --bind="enter:abort+become:echo {}|cut -d$'\t' -f2 |base64 --decode| jq -r '.url' | xargs -I % firefox % ";
 
