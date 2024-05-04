@@ -7,7 +7,7 @@ echo "${repo}" | xargs -I {}  gh issue list --json id,labels,state,url,milestone
         jq -r '.[] | "\(.updatedAt) -> \(.title) \(.author.login) \(.labels)\t\(.| @base64)"' | fzf --delimiter='\t' \
         --header="${header}" \
         --preview='echo {2} | base64 --decode | jq -r '\''"Name \(.title) \(.number) \nCreated At \(.createdAt) Updated \(.updatedAt)\nState \(.state)\n\(.url)\nlabels \(.labels)\nassignees \(.assignees)"'\'''  \
-	--bind="ctrl-a:execute:echo {}|cut -d$'\t' -f2|base64 --decode|jq -r '.number'|xargs -I % gh issue edit --repo ${repo} --add-assignee \"@me\" %" \
+	--bind="ctrl-a:abort+execute:echo {}|cut -d$'\t' -f2|base64 --decode|jq -r '.number'|xargs -I % gh issue edit --repo ${repo} --add-assignee \"@me\" %" \
 	--bind="ctrl-e:abort+become:echo {}|cut -d$'\t' -f2|base64 --decode|jq -r '.number'|xargs -I % echo edit % " \
 	--bind="F4:abort+become:echo {}|cut -d$'\t' -f2|base64 --decode|jq -r '.number'|xargs -I % echo comment % " \
 	--bind="ctrl-q:abort+become:echo {}|cut -d$'\t' -f2|base64 --decode|jq -r '.number'|xargs -I % echo close % " \
