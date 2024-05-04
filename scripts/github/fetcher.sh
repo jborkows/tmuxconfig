@@ -5,7 +5,7 @@ echo "${repo}" | xargs -I {} gh run list --repo {} --json  databaseId,name,url,s
         --header='f2 to delete, enter to open' \
 	--preview='echo {2} | base64 --decode | jq -r '\''"Name \(.name) \(.databaseId) \(.conclusion) \nCreated At \(.createdAt)\nStatus \(.status)\n\(.url)"'\'''  \
 	--bind="f2:abort+execute:for item in {+}; do id=\$(echo \${item}|sed 's/\s+/ /'|cut -f4 -d' '); echo \${id}; gh api -X DELETE /repos/${repo}/actions/runs/\${id}; done;" \
-        | sed 's/\s+/ /' | sed 's/\t/ /' | cut -f5 -d ' ' |base64 --decode| jq -r '.url' |   xargs -I {} firefox {} ;
+        | sed 's/\s+/ /' | sed 's/\t/ /' | cut -f6 -d ' ' |base64 --decode| jq -r '.url' |   xargs -I {} firefox {} ;
 
 
 
