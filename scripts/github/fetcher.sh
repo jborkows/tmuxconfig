@@ -1,5 +1,6 @@
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+source "${DIR}/common.sh"
 export FZF_DEFAULT_OPTS="--preview 'batcat -n --color=always {}' --bind 'f1:toggle-preview' --preview-window=right:70% --multi --ansi --reverse"
-repo=$(git remote -v |grep origin| sed "s/:/ /" | sed "s/\s/ /" |cut -d" " -f3 |sed "s/\s*//"|sed "s/\.git//" | uniq )
 echo "${repo}" | xargs -I {} gh run list --repo {} --json  databaseId,name,url,status,createdAt,conclusion --limit 100 |\
 	jq -r '.[] | "\(.createdAt) -> \(.name) \(.databaseId) \(.conclusion)\t\(.| @base64)"' | fzf --delimiter='\t' \
         --header='f2 to delete, enter to open' \
